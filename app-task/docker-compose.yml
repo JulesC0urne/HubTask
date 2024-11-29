@@ -1,0 +1,254 @@
+version: '3.9' # Version mise à jour
+
+services:
+  postgres-task:
+    image: postgres:15
+    container_name: postgres-db-task
+    restart: always
+    environment:
+      POSTGRES_DB: tasks
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - postgres_tasks_data:/var/lib/postgresql/data
+      - ./db-init/task-db-init.sql:/docker-entrypoint-initdb.d/task-db-init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tasks"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  task-service:
+    build:
+      context: ./task-service
+      dockerfile: Dockerfile
+    image: task-service:1.0
+    container_name: task-service-app
+    ports:
+      - "8082:8082"
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-task:5432/tasks
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+    networks:
+      - backend
+    depends_on:
+      postgres-task:
+        condition: service_healthy
+
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile 
+    image: auth-service:1.0
+    container_name: auth-service-app
+    ports:
+      - "8081:8081" # Port exposé pour le service d'authentification
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-auth:5432/users
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+    networks:
+      - backend
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  postgres-auth:
+    image: postgres:15
+    container_name: postgres-db-auth
+    restart: always
+    environment:
+      POSTGRES_DB: users
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - postgres_auth_data:/var/lib/postgresql/data
+      - ./db-init/auth-db-init.sql:/docker-entrypoint-initdb.d/auth-db-init.sql
+    ports:
+      - "5433:5432"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d users"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./task-app
+      dockerfile: Dockerfile 
+    image: react-frontend:1.0
+    container_name: react-frontend-app
+    volumes:
+      - ./task-app:/app
+    ports:
+      - "3000:80" 
+    networks:
+      - backend
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    image: gateway-service:1.0
+    container_name: gateway-service-app
+    ports:
+      - "8080:8080" # Port exposé pour la passerelle
+    restart: always
+    environment:
+      SERVER_PORT: 8080
+
+      # Configuration des routes basées sur le fichier properties
+      SPRING_CLOUD_GATEWAY_ROUTES_0_ID: signup_route
+      SPRING_CLOUD_GATEWAY_ROUTES_0_URI: http://auth-service:8081
+      SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0: Path=/api/auth/signup
+
+      SPRING_CLOUD_GATEWAY_ROUTES_1_ID: login_route
+      SPRING_CLOUD_GATEWAY_ROUTES_1_URI: http://auth-service:8081
+      SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0: Path=/api/auth/login
+
+      SPRING_CLOUD_GATEWAY_ROUTES_2_ID: users_route
+      SPRING_CLOUD_GATEWAY_ROUTES_2_URI: http://auth-service:8081
+      SPRING_CLOUD_GATEWAY_ROUTES_2_PREDICATES_0: Path=/api/auth/users
+
+      SPRING_CLOUD_GATEWAY_ROUTES_3_ID: task_route
+      SPRING_CLOUD_GATEWAY_ROUTES_3_URI: http://task-service:8082
+      SPRING_CLOUD_GATEWAY_ROUTES_3_PREDICATES_0: Path=/api/tasks/**
+
+      SPRING_CLOUD_GATEWAY_ROUTES_4_ID: project_route
+      SPRING_CLOUD_GATEWAY_ROUTES_4_URI: http://project-service:8083
+      SPRING_CLOUD_GATEWAY_ROUTES_4_PREDICATES_0: Path=/api/projects/**
+
+      SPRING_CLOUD_GATEWAY_ROUTES_5_ID: project_event_route
+      SPRING_CLOUD_GATEWAY_ROUTES_5_URI: http://project-service:8083
+      SPRING_CLOUD_GATEWAY_ROUTES_5_PREDICATES_0: Path=/api/projects/events
+
+      SPRING_CLOUD_GATEWAY_ROUTES_6_ID: task_event_route
+      SPRING_CLOUD_GATEWAY_ROUTES_6_URI: http://task-service:8082
+      SPRING_CLOUD_GATEWAY_ROUTES_6_PREDICATES_0: Path=/api/tasks/events
+
+      SPRING_CLOUD_GATEWAY_ROUTES_7_ID: message_route
+      SPRING_CLOUD_GATEWAY_ROUTES_7_URI: http://message-service:8084
+      SPRING_CLOUD_GATEWAY_ROUTES_7_PREDICATES_0: Path=/api/messages/**
+
+      SPRING_CLOUD_GATEWAY_ROUTES_8_ID: message_event_route
+      SPRING_CLOUD_GATEWAY_ROUTES_8_URI: http://message-service:8084
+      SPRING_CLOUD_GATEWAY_ROUTES_8_PREDICATES_0: Path=/api/messages/stream/**
+
+      SPRING_CLOUD_GATEWAY_DISCOVERY_LOCATOR_ENABLED: "true"
+      SPRING_CLOUD_GATEWAY_DISCOVERY_LOCATOR_LOWER_CASE_SERVICE_ID: "true"
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_GATEWAY: DEBUG
+      SPRING_MAIN_WEB_APPLICATION_TYPE: reactive
+    
+    depends_on:
+      - auth-service
+      - task-service
+      - project-service
+      - message-service
+    networks:
+      - backend
+
+  project-service:
+      build:
+        context: ./project-service
+        dockerfile: Dockerfile
+      image: project-service:1.0
+      container_name: project-service-app
+      ports:
+        - "8083:8083" # Port exposé pour le service de projet
+      restart: always
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-project:5432/projects
+        SPRING_DATASOURCE_USERNAME: postgres
+        SPRING_DATASOURCE_PASSWORD: admin
+      networks:
+        - backend
+      depends_on:
+        postgres-project:
+          condition: service_healthy
+
+  postgres-project:
+    image: postgres:15
+    container_name: postgres-db-project
+    restart: always
+    environment:
+      POSTGRES_DB: projects
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - postgres_project_data:/var/lib/postgresql/data
+      - ./db-init/project-db-init.sql:/docker-entrypoint-initdb.d/project-db-init.sql
+    ports:
+      - "5434:5432"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d projects"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  postgres-message:
+    image: postgres:15
+    container_name: postgres-db-message
+    restart: always
+    environment:
+      POSTGRES_DB: messages
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - postgres_message_data:/var/lib/postgresql/data
+      - ./db-init/message-db-init.sql:/docker-entrypoint-initdb.d/message-db-init.sql
+    ports:
+      - "5435:5432"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d messages"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  message-service:
+    build:
+      context: ./message-service
+      dockerfile: Dockerfile
+    image: message-service:1.0
+    container_name: message-service-app
+    ports:
+      - "8084:8084"
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-message:5432/messages
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+    networks:
+      - backend
+    depends_on:
+      postgres-message:
+        condition: service_healthy
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  postgres_tasks_data:
+    # Volume pour la base de données de tâches
+    driver: local
+  postgres_auth_data:
+    # Volume pour la base de données d'authentification
+    driver: local
+  postgres_project_data:
+    # Volume pour la base de données de projet
+    driver: local
+  postgres_message_data:
+    driver: local
