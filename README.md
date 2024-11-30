@@ -26,8 +26,8 @@ Avant de commencer, assurez-vous d'avoir installé les outils suivants :
 
 ## Installation
 
-git clone <URL_DE_VOTRE_DEPOT>
-cd <NOM_DU_REPERTOIRE>
+git clone https://github.com/JulesC0urne/HubTask.git
+cd app-task
 
 docker compose up --build -d
 
@@ -37,19 +37,34 @@ Se rendre sur l'url http://localhost:3000
 
 ## Architecture
 .
-├── auth-service/             # Microservice d'authentification
-├── project-service/          # Microservice de gestion des projets
-├── task-service/             # Microservice de gestion des tâches
-├── message-service/          # Microservice de gestion des messages
-├── frontend/                 # Application frontend en React
-│   ├── src/                  # Code source de l'application frontend
-│   ├── package.json          # Dépendances et scripts du frontend
-├── gateway/                  # API Gateway (Spring Cloud Gateway ou autre)
-│   ├── src/                  # Code source de l'application Gateway
-│   ├── pom.xml               # Dépendances Maven pour le Gateway
-│   └── application.properties # Configuration de l'API Gateway
-├── db-init/                  # Scripts d'initialisation de la base de données (SQL)
-│   └── init.sql              # Script pour initialiser les tables et données de la base
-├── docker-compose.yml        # Définition des services Docker (PostgreSQL, backend, frontend, gateway)
-└── README.md                 # Documentation du projet
+├── auth-service/             # Microservice d'authentification  
+│   ├── src/                  # Code source du service d'authentification   
+│   ├── pom.xml               # Dépendances Maven pour le service d'authentification  
+│   └── Dockerfile	      # Dockerfile du service d'authentification  
+├── project-service/          # Microservice de gestion des projets  
+│   ├── src/                  # Code source du service de gestion de projets    
+│   ├── pom.xml               # Dépendances Maven pour le service de gestion de projets  
+│   └── Dockerfile	      # Dockerfile du service de gestion de projets  
+├── task-service/             # Microservice de gestion des tâches  
+│   ├── src/                  # Code source du service de gestion des tâches    
+│   ├── pom.xml               # Dépendances Maven pour le service de gestion des tâches  
+│   └── Dockerfile	      # Dockerfile du service de gestion des tâches  
+├── gateway/                  # API Gateway (Spring Cloud Gateway)  
+│   ├── src/                  # Code source de l'application Gateway  
+│   ├── pom.xml               # Dépendances Maven pour le Gateway  
+│   └── application.properties # Configuration de l'API Gateway  
+├── message-service/          # Microservice de gestion des messages  
+│   ├── src/                  # Code source du service de gestion des messages  
+│   ├── pom.xml               # Dépendances Maven pour le service de gestion des messages  
+│   └── Dockerfile	      # Dockerfile du service de gestion des messages  
+├── frontend/                 # Application frontend en React  
+│   ├── src/                  # Code source de l'application frontend  
+│   └── package.json          # Dépendances et scripts du frontend  
+├── db-init/                  # Scripts d'initialisation des base de données  
+│   ├── auth-db-init.sql      # Script pour initialiser la base de données d'authentification  
+│   ├── project-db-init.sql   # Script pour initialiser la base de données de gestion des projets  
+│   ├── task-db-init.sql      # Script pour initialiser la base de données de gestion des tâches  
+│   └── message-db-init.sql   # Script pour initialiser la base de données de gestion des messages  
+├── docker-compose.yml        # Définition des services Docker (PostgreSQL, backend, frontend, gateway)  
+└── README.md                 # Documentation du projet  
 
