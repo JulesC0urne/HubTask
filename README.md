@@ -78,7 +78,7 @@ HubTask/
 │   │   └── Dockerfile           <!-- Fichier Docker pour ce service -->  
 │   │  
 │   ├── gateway/                 <!-- Service de passerelle pour gérer les requêtes entrantes -->  
-│   │   ├── src/                 <!-- Code source pour la gestion des requêtes vers les microservices -->    
+│   │   ├── src/                 <!-- Code source pour la gestion des requêtes vers les microservices -->  
 │   │   ├── pom.xml              <!-- Dépendances de la passerelle API -->  
 │   │   └── Dockerfile           <!-- Fichier Docker pour le gateway -->  
 │   │  
@@ -92,7 +92,7 @@ HubTask/
 │       ├── project-service/     <!-- Documentation spécifique pour le service projet -->  
 │       ├── task-service/        <!-- Documentation spécifique pour le service task -->  
 │       ├── message-service/     <!-- Documentation spécifique pour le service message -->  
-│       └── gateway              <!-- Documentation spécifique pour le gateway -->  
+│       └── gateway/             <!-- Documentation spécifique pour le gateway -->  
 │        
 ├── frontend/                    <!-- Interface utilisateur construite en React -->  
 │   ├── src/                     <!-- Code frontend de l'application React -->  
@@ -111,5 +111,4 @@ HubTask/
 │   └── message-db-init.sql      <!-- Script pour la base des messages -->  
 │  
 ├── docker-compose.yml           <!-- Configuration des conteneurs Docker pour tous les services -->  
-└── README.md                    <!-- Description générale et détails du projet -->  
-
+└── README.md                    <!-- Description générale et détails du projet -->
