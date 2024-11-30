@@ -61,55 +61,55 @@ docker compose up --build -d
 
 HubTask/
 │
-├── backend/                     <!-- Contient tous les services backend (microservices et API Gateway) -->
-│   ├── auth-service/            <!-- Service gérant l'authentification des utilisateurs -->
-│   │   ├── src/                 <!-- Code principal du service -->
-│   │   ├── pom.xml              <!-- Gestion des dépendances Java -->
-│   │   └── Dockerfile           <!-- Configuration pour la création du conteneur Docker -->
-│   │
-│   ├── project-service/         <!-- Service gérant les projets -->
-│   │   ├── src/                 <!-- Code principal pour la gestion des projets -->
-│   │   ├── pom.xml              <!-- Dépendances Java pour la gestion des projets -->
-│   │   └── Dockerfile           <!-- Fichier de configuration Docker -->
-│   │
-│   ├── task-service/            <!-- Service responsable des tâches -->
-│   │   ├── src/                 <!-- Code du service pour gérer les tâches -->
-│   │   ├── pom.xml              <!-- Dépendances Java pour gérer les tâches -->
-│   │   └── Dockerfile           <!-- Fichier Docker pour ce service -->
-│   │
+├── backend/                     <!-- Contient tous les services backend (microservices et API Gateway) -->  
+│   ├── auth-service/            <!-- Service gérant l'authentification des utilisateurs -->  
+│   │   ├── src/                 <!-- Code principal du service -->  
+│   │   ├── pom.xml              <!-- Gestion des dépendances Java -->  
+│   │   └── Dockerfile           <!-- Configuration pour la création du conteneur Docker -->  
+│   │  
+│   ├── project-service/         <!-- Service gérant les projets -->  
+│   │   ├── src/                 <!-- Code principal pour la gestion des projets -->  
+│   │   ├── pom.xml              <!-- Dépendances Java pour la gestion des projets -->  
+│   │   └── Dockerfile           <!-- Fichier de configuration Docker -->  
+│   │  
+│   ├── task-service/            <!-- Service responsable des tâches -->  
+│   │   ├── src/                 <!-- Code du service pour gérer les tâches -->  
+│   │   ├── pom.xml              <!-- Dépendances Java pour gérer les tâches -->  
+│   │   └── Dockerfile           <!-- Fichier Docker pour ce service -->  
+│   │  
 │   ├── gateway/                 <!-- Service de passerelle pour gérer les requêtes entrantes -->  
-│   │   ├── src/                 <!-- Code source pour la gestion des requêtes vers les microservices -->  
+│   │   ├── src/                 <!-- Code source pour la gestion des requêtes vers les microservices -->    
 │   │   ├── pom.xml              <!-- Dépendances de la passerelle API -->  
 │   │   └── Dockerfile           <!-- Fichier Docker pour le gateway -->  
-│   │
-│   ├── message-service/         <!-- Service pour gérer les messages entre utilisateurs -->
-│   │   ├── src/                 <!-- Code principal du service des messages -->
-│   │   ├── pom.xml              <!-- Dépendances de gestion des messages -->
-│   │   └── Dockerfile           <!-- Configuration Docker pour ce service -->
-│   │
-│   └── doc/                     <!-- Documentation du backend -->
-│       ├── auth-service/        <!-- Documentation spécifique pour le service auth -->
-│       ├── project-service/     <!-- Documentation spécifique pour le service projet -->
-│       ├── task-service/        <!-- Documentation spécifique pour le service task -->
-│       ├── message-service/     <!-- Documentation spécifique pour le service message -->
-│       └── gateway              <!-- Documentation spécifique pour le gateway -->
-│   
-├── frontend/                    <!-- Interface utilisateur construite en React -->
-│   ├── src/                     <!-- Code frontend de l'application React -->
-│   │   ├── components/          <!-- Composants de l'application React -->
-│   │   ├── context/             <!-- Contexts pour gérer les données de l'application React -->
-│   │   ├── screens/             <!-- Pages de l'application React -->
-│   │   ├── services/            <!-- Services de l'application React -->
-│   │   ├── utils/               <!-- Méthodes et classes utilitaire de l'application React -->
-│   ├── package.json             <!-- Dépendances et commandes pour l'application React -->
-│   └── Dockerfile               <!-- Fichier Docker pour la création du conteneur frontend -->
-│
-├── db-init/                     <!-- Scripts pour créer et initialiser les bases de données -->
-│   ├── auth-db-init.sql         <!-- Script pour configurer la base de données d'authentification -->
-│   ├── project-db-init.sql      <!-- Script pour configurer la base des projets -->
-│   ├── task-db-init.sql         <!-- Script pour configurer la base des tâches -->
-│   └── message-db-init.sql      <!-- Script pour la base des messages -->
-│
-├── docker-compose.yml           <!-- Configuration des conteneurs Docker pour tous les services -->
-└── README.md                    <!-- Description générale et détails du projet -->
+│   │  
+│   ├── message-service/         <!-- Service pour gérer les messages entre utilisateurs -->  
+│   │   ├── src/                 <!-- Code principal du service des messages -->  
+│   │   ├── pom.xml              <!-- Dépendances de gestion des messages -->  
+│   │   └── Dockerfile           <!-- Configuration Docker pour ce service -->  
+│   │  
+│   └── doc/                     <!-- Documentation du backend -->  
+│       ├── auth-service/        <!-- Documentation spécifique pour le service auth -->  
+│       ├── project-service/     <!-- Documentation spécifique pour le service projet -->  
+│       ├── task-service/        <!-- Documentation spécifique pour le service task -->  
+│       ├── message-service/     <!-- Documentation spécifique pour le service message -->  
+│       └── gateway              <!-- Documentation spécifique pour le gateway -->  
+│     
+├── frontend/                    <!-- Interface utilisateur construite en React -->  
+│   ├── src/                     <!-- Code frontend de l'application React -->  
+│   │   ├── components/          <!-- Composants de l'application React -->  
+│   │   ├── context/             <!-- Contexts pour gérer les données de l'application React -->  
+│   │   ├── screens/             <!-- Pages de l'application React -->  
+│   │   ├── services/            <!-- Services de l'application React -->  
+│   │   ├── utils/               <!-- Méthodes et classes utilitaire de l'application React -->  
+│   ├── package.json             <!-- Dépendances et commandes pour l'application React -->  
+│   └── Dockerfile               <!-- Fichier Docker pour la création du conteneur frontend -->  
+│  
+├── db-init/                     <!-- Scripts pour créer et initialiser les bases de données -->  
+│   ├── auth-db-init.sql         <!-- Script pour configurer la base de données d'authentification -->  
+│   ├── project-db-init.sql      <!-- Script pour configurer la base des projets -->  
+│   ├── task-db-init.sql         <!-- Script pour configurer la base des tâches -->  
+│   └── message-db-init.sql      <!-- Script pour la base des messages -->  
+│  
+├── docker-compose.yml           <!-- Configuration des conteneurs Docker pour tous les services -->  
+└── README.md                    <!-- Description générale et détails du projet -->  
 
