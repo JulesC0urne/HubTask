@@ -44,18 +44,18 @@ Ce projet utilise les versions suivantes :
 
 ## Installation
 
-git clone https://github.com/JulesC0urne/HubTask.git
-cd HubTask
+git clone https://github.com/JulesC0urne/HubTask.git  
+cd HubTask  
 
-docker compose up --build -d
+docker compose up --build -d  
 
 ## Utilisation
 
--  Se rendre sur l'url http://localhost:3000
+-  Se rendre sur l'url http://localhost:3000  
 
--  Enregistrer un utilisateur sur la page d'inscription puis se connecter
+-  Enregistrer un utilisateur sur la page d'inscription puis se connecter  
 
--  Créez et gérez vos projets, tâches et discutez avec vos collaborateurs.
+-  Créez et gérez vos projets, tâches et discutez avec vos collaborateurs.  
 
 ## Architecture
 
