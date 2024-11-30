@@ -1,0 +1,6 @@
+com.example.project_service
+com.example.project_service.configs
+com.example.project_service.controllers
+com.example.project_service.entities
+com.example.project_service.repositories
+com.example.project_service.services

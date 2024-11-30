@@ -22,7 +22,7 @@ services:
 
   task-service:
     build:
-      context: ./task-service
+      context: ./backend/task-service
       dockerfile: Dockerfile
     image: task-service:1.0
     container_name: task-service-app
@@ -41,7 +41,7 @@ services:
 
   auth-service:
     build:
-      context: ./auth-service
+      context: ./backend/auth-service
       dockerfile: Dockerfile 
     image: auth-service:1.0
     container_name: auth-service-app
@@ -81,12 +81,12 @@ services:
 
   frontend:
     build:
-      context: ./task-app
+      context: ./frontend
       dockerfile: Dockerfile 
     image: react-frontend:1.0
     container_name: react-frontend-app
     volumes:
-      - ./task-app:/app
+      - ./frontend:/app
     ports:
       - "3000:80" 
     networks:
@@ -94,7 +94,7 @@ services:
 
   gateway:
     build:
-      context: ./gateway
+      context: ./backend/gateway
       dockerfile: Dockerfile
     image: gateway-service:1.0
     container_name: gateway-service-app
@@ -156,7 +156,7 @@ services:
 
   project-service:
       build:
-        context: ./project-service
+        context: ./backend/project-service
         dockerfile: Dockerfile
       image: project-service:1.0
       container_name: project-service-app
@@ -217,7 +217,7 @@ services:
 
   message-service:
     build:
-      context: ./message-service
+      context: ./backend/message-service
       dockerfile: Dockerfile
     image: message-service:1.0
     container_name: message-service-app

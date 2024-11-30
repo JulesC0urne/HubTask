@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.example.task_service"},{"l":"com.example.task_service.configs"},{"l":"com.example.task_service.controllers"},{"l":"com.example.task_service.entities"},{"l":"com.example.task_service.repository"},{"l":"com.example.task_service.services"}];updateSearchResults();

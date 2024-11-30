@@ -1,0 +1,6 @@
+com.example.message
+com.example.message.configs
+com.example.message.controllers
+com.example.message.entities
+com.example.message.repositories
+com.example.message.services

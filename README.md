@@ -1,6 +1,8 @@
-# Project Name
+# Projet de gestion de tâches.
 
-**Description**: Cette application est une solution full-stack utilisant React pour le frontend, Spring Boot pour le backend, PostgreSQL comme base de données, un API Gateway pour gérer les services et Docker pour la conteneurisation.
+**Description**: Cette application est une solution full-stack permettant de gérer des utilisateurs, des projets, des tâches. Un système de messagerie pour chaque projet est mis en place permettant à tous les acteurs d'un projet de communiquer. Toutes les actions sont mis à jour en temps réel.
+
+L'application utilise React pour le frontend, Spring Boot pour le backend, PostgreSQL comme base de données, Spring cloud gateway pour le gateway, et Docker pour la conteneurisation.
 
 ## Table des matières
 
@@ -31,7 +33,7 @@ Avant de commencer, assurez-vous d'avoir installé les outils suivants :
 Ce projet utilise les versions suivantes :  
 
 - **React** : 18.3.1  
-- **Spring Boot** : 3.3.5  
+- **Spring Boot** : 3.3.*  
 - **PostgreSQL** : 17
 - **Docker** : 27.2.0
 - **Docker Compose** : 2.29.2
@@ -49,38 +51,65 @@ docker compose up --build -d
 
 ## Utilisation
 
-Se rendre sur l'url http://localhost:3000
+-  Se rendre sur l'url http://localhost:3000
+
+-  Enregistrer un utilisateur sur la page d'inscription puis se connecter
+
+-  Créez et gérez vos projets, tâches et discutez avec vos collaborateurs.
 
 ## Architecture
-.  
-├── auth-service/             # Microservice d'authentification  
-│   ├── src/                  # Code source du service d'authentification   
-│   ├── pom.xml               # Dépendances Maven pour le service d'authentification  
-│   └── Dockerfile	      # Dockerfile du service d'authentification  
-├── project-service/          # Microservice de gestion des projets  
-│   ├── src/                  # Code source du service de gestion de projets    
-│   ├── pom.xml               # Dépendances Maven pour le service de gestion de projets  
-│   └── Dockerfile	      # Dockerfile du service de gestion de projets  
-├── task-service/             # Microservice de gestion des tâches  
-│   ├── src/                  # Code source du service de gestion des tâches    
-│   ├── pom.xml               # Dépendances Maven pour le service de gestion des tâches  
-│   └── Dockerfile	      # Dockerfile du service de gestion des tâches  
-├── gateway/                  # API Gateway (Spring Cloud Gateway)  
-│   ├── src/                  # Code source de l'application Gateway  
-│   ├── pom.xml               # Dépendances Maven pour le Gateway  
-│   └── application.properties # Configuration de l'API Gateway  
-├── message-service/          # Microservice de gestion des messages  
-│   ├── src/                  # Code source du service de gestion des messages  
-│   ├── pom.xml               # Dépendances Maven pour le service de gestion des messages  
-│   └── Dockerfile	      # Dockerfile du service de gestion des messages  
-├── frontend/                 # Application frontend en React  
-│   ├── src/                  # Code source de l'application frontend  
-│   └── package.json          # Dépendances et scripts du frontend  
-├── db-init/                  # Scripts d'initialisation des base de données  
-│   ├── auth-db-init.sql      # Script pour initialiser la base de données d'authentification  
-│   ├── project-db-init.sql   # Script pour initialiser la base de données de gestion des projets  
-│   ├── task-db-init.sql      # Script pour initialiser la base de données de gestion des tâches  
-│   └── message-db-init.sql   # Script pour initialiser la base de données de gestion des messages  
-├── docker-compose.yml        # Définition des services Docker (PostgreSQL, backend, frontend, gateway)  
-└── README.md                 # Documentation du projet  
+
+HubTask/
+│
+├── backend/                     <!-- Contient tous les services backend (microservices et API Gateway) -->
+│   ├── auth-service/            <!-- Service gérant l'authentification des utilisateurs -->
+│   │   ├── src/                 <!-- Code principal du service -->
+│   │   ├── pom.xml              <!-- Gestion des dépendances Java -->
+│   │   └── Dockerfile           <!-- Configuration pour la création du conteneur Docker -->
+│   │
+│   ├── project-service/         <!-- Service gérant les projets -->
+│   │   ├── src/                 <!-- Code principal pour la gestion des projets -->
+│   │   ├── pom.xml              <!-- Dépendances Java pour la gestion des projets -->
+│   │   └── Dockerfile           <!-- Fichier de configuration Docker -->
+│   │
+│   ├── task-service/            <!-- Service responsable des tâches -->
+│   │   ├── src/                 <!-- Code du service pour gérer les tâches -->
+│   │   ├── pom.xml              <!-- Dépendances Java pour gérer les tâches -->
+│   │   └── Dockerfile           <!-- Fichier Docker pour ce service -->
+│   │
+│   ├── gateway/                 <!-- Service de passerelle pour gérer les requêtes entrantes -->  
+│   │   ├── src/                 <!-- Code source pour la gestion des requêtes vers les microservices -->  
+│   │   ├── pom.xml              <!-- Dépendances de la passerelle API -->  
+│   │   └── Dockerfile           <!-- Fichier Docker pour le gateway -->  
+│   │
+│   ├── message-service/         <!-- Service pour gérer les messages entre utilisateurs -->
+│   │   ├── src/                 <!-- Code principal du service des messages -->
+│   │   ├── pom.xml              <!-- Dépendances de gestion des messages -->
+│   │   └── Dockerfile           <!-- Configuration Docker pour ce service -->
+│   │
+│   └── doc/                     <!-- Documentation du backend -->
+│       ├── auth-service/        <!-- Documentation spécifique pour le service auth -->
+│       ├── project-service/     <!-- Documentation spécifique pour le service projet -->
+│       ├── task-service/        <!-- Documentation spécifique pour le service task -->
+│       ├── message-service/     <!-- Documentation spécifique pour le service message -->
+│       └── gateway              <!-- Documentation spécifique pour le gateway -->
+│   
+├── frontend/                    <!-- Interface utilisateur construite en React -->
+│   ├── src/                     <!-- Code frontend de l'application React -->
+│   │   ├── components/          <!-- Composants de l'application React -->
+│   │   ├── context/             <!-- Contexts pour gérer les données de l'application React -->
+│   │   ├── screens/             <!-- Pages de l'application React -->
+│   │   ├── services/            <!-- Services de l'application React -->
+│   │   ├── utils/               <!-- Méthodes et classes utilitaire de l'application React -->
+│   ├── package.json             <!-- Dépendances et commandes pour l'application React -->
+│   └── Dockerfile               <!-- Fichier Docker pour la création du conteneur frontend -->
+│
+├── db-init/                     <!-- Scripts pour créer et initialiser les bases de données -->
+│   ├── auth-db-init.sql         <!-- Script pour configurer la base de données d'authentification -->
+│   ├── project-db-init.sql      <!-- Script pour configurer la base des projets -->
+│   ├── task-db-init.sql         <!-- Script pour configurer la base des tâches -->
+│   └── message-db-init.sql      <!-- Script pour la base des messages -->
+│
+├── docker-compose.yml           <!-- Configuration des conteneurs Docker pour tous les services -->
+└── README.md                    <!-- Description générale et détails du projet -->
 

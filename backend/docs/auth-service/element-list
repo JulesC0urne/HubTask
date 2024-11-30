@@ -1,0 +1,8 @@
+com.example.auth_service
+com.example.auth_service.configs
+com.example.auth_service.controllers
+com.example.auth_service.entities
+com.example.auth_service.enums
+com.example.auth_service.exceptions
+com.example.auth_service.repository
+com.example.auth_service.services
