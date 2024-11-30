@@ -32,7 +32,7 @@ Ce projet utilise les versions suivantes :
 
 - **React** : 18.3.1  
 - **Spring Boot** : 3.3.5  
-- **PostgreSQL** : 15
+- **PostgreSQL** : 17
 - **Docker** : 27.2.0
 - **Docker Compose** : 2.29.2
 - **Spring Cloud Gateway** : 2023.0.2
@@ -43,7 +43,7 @@ Ce projet utilise les versions suivantes :
 ## Installation
 
 git clone https://github.com/JulesC0urne/HubTask.git
-cd app-task
+cd HubTask
 
 docker compose up --build -d
 

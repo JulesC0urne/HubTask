@@ -3,6 +3,8 @@ package com.example.auth_service.configs;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -35,6 +37,19 @@ public class AuthConfig {
                         .anyRequest().authenticated()
                 )
                 .build();
+    }
+
+    /**
+     * Crée et retourne un gestionnaire d'authentification (AuthenticationManager) en utilisant la configuration fournie.
+     *
+     * @param authenticationConfiguration La configuration d'authentification utilisée pour obtenir le gestionnaire d'authentification.
+     * @return Un objet {@link AuthenticationManager} configuré avec la configuration d'authentification fournie.
+     * @throws Exception Si une erreur survient lors de la création du gestionnaire d'authentification.
+     */
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     /**
