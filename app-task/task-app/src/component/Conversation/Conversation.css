@@ -1,0 +1,101 @@
+/* Boîte de conversation */
+.conversation-box {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 300px;
+    height: 400px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px 10px 0 0;
+    transition: transform 0.3s ease-in-out;
+    transform: translateY(100%); 
+    opacity: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+h2 {
+    color: black;
+}
+
+.conversation-box.open {
+    transform: translateY(0); 
+    opacity: 1;
+}
+
+.messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px;
+    max-height: 300px;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #ddd;
+    width: 90%;
+    margin: 5px;
+    overflow-wrap: break-word;
+}
+
+.message {
+    margin-bottom: 10px;
+}
+
+.message strong {
+    color: #007bff;
+}
+
+.input-container {
+    display: flex;
+    padding: 10px;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+}
+
+.input-container input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.input-container button {
+    padding: 10px;
+    border: 1px solid #292a2c;
+    background-color: #2a2b2c;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.input-container button:hover {
+    background-color: #0056b3;
+}
+
+
+.toggle-btn {
+    position: fixed;
+    bottom: 20px; 
+    right: 20px;
+    width: 300px; 
+    height: 50px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px; 
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.toggle-btn:hover {
+    background-color: #0056b3;
+}
+
