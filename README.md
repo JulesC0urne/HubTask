@@ -59,7 +59,7 @@ docker compose up --build -d
 
 ## Architecture
 
-HubTask/
+HubTask/  
 │  
 ├── backend/                       <!-- Contient tous les services backend (microservices et API Gateway) -->  
 │     ├── auth-service/            <!-- Service gérant l'authentification des utilisateurs -->  
