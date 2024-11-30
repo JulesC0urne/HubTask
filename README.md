@@ -90,9 +90,9 @@ HubTask/
 │     ├── doc/                     <!-- Documentation du backend -->  
 │     │   ├── auth-service/        <!-- Documentation spécifique pour le service auth -->  
 │     │   ├── project-service/     <!-- Documentation spécifique pour le service projet -->  
-│         ├── task-service/        <!-- Documentation spécifique pour le service task -->  
-│         ├── message-service/     <!-- Documentation spécifique pour le service message -->  
-│         └── gateway/             <!-- Documentation spécifique pour le gateway -->  
+│     │   ├── task-service/        <!-- Documentation spécifique pour le service task -->  
+│     │   ├── message-service/     <!-- Documentation spécifique pour le service message -->  
+│     │   └── gateway/             <!-- Documentation spécifique pour le gateway -->  
 │  
 ├── frontend/                      <!-- Interface utilisateur construite en React -->  
 │     ├── src/                     <!-- Code frontend de l'application React -->  
