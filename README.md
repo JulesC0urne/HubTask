@@ -5,6 +5,7 @@
 ## Table des matières
 
 - [Prérequis](#prérequis)
+- [Versions](#versions)
 - [Installation](#installation)
   - [Docker](#docker)
 - [Utilisation](#utilisation)
@@ -24,6 +25,21 @@ Avant de commencer, assurez-vous d'avoir installé les outils suivants :
    ```bash
    docker-compose --version
 
+
+## Versions
+
+Ce projet utilise les versions suivantes :  
+
+- **React** : 18.3.1  
+- **Spring Boot** : 3.3.5  
+- **PostgreSQL** : 15
+- **Docker** : 27.2.0
+- **Docker Compose** : 2.29.2
+- **Spring Cloud Gateway** : 2023.0.2
+- **Java** : 17
+- **Node.js** : 20.18.0
+
+
 ## Installation
 
 git clone https://github.com/JulesC0urne/HubTask.git
@@ -36,7 +52,7 @@ docker compose up --build -d
 Se rendre sur l'url http://localhost:3000
 
 ## Architecture
-.
+.  
 ├── auth-service/             # Microservice d'authentification  
 │   ├── src/                  # Code source du service d'authentification   
 │   ├── pom.xml               # Dépendances Maven pour le service d'authentification  

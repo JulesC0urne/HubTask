@@ -1,8 +1,6 @@
-version: '3.9' # Version mise à jour
-
 services:
   postgres-task:
-    image: postgres:15
+    image: postgres:17
     container_name: postgres-db-task
     restart: always
     environment:
@@ -61,7 +59,7 @@ services:
         condition: service_healthy
 
   postgres-auth:
-    image: postgres:15
+    image: postgres:17
     container_name: postgres-db-auth
     restart: always
     environment:
@@ -176,7 +174,7 @@ services:
           condition: service_healthy
 
   postgres-project:
-    image: postgres:15
+    image: postgres:17
     container_name: postgres-db-project
     restart: always
     environment:
@@ -197,7 +195,7 @@ services:
       retries: 5
   
   postgres-message:
-    image: postgres:15
+    image: postgres:17
     container_name: postgres-db-message
     restart: always
     environment:
