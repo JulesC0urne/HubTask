@@ -87,9 +87,9 @@ HubTask/
 │     │   ├── pom.xml              <!-- Dépendances de gestion des messages -->  
 │     │   └── Dockerfile           <!-- Configuration Docker pour ce service -->  
 │     │  
-│     └── doc/                     <!-- Documentation du backend -->  
-│         ├── auth-service/        <!-- Documentation spécifique pour le service auth -->  
-│         ├── project-service/     <!-- Documentation spécifique pour le service projet -->  
+│     ├── doc/                     <!-- Documentation du backend -->  
+│     │   ├── auth-service/        <!-- Documentation spécifique pour le service auth -->  
+│     │   ├── project-service/     <!-- Documentation spécifique pour le service projet -->  
 │         ├── task-service/        <!-- Documentation spécifique pour le service task -->  
 │         ├── message-service/     <!-- Documentation spécifique pour le service message -->  
 │         └── gateway/             <!-- Documentation spécifique pour le gateway -->  
