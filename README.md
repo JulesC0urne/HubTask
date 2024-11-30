@@ -60,7 +60,7 @@ docker compose up --build -d
 ## Architecture
 
 HubTask/
-│
+│  
 ├── backend/                     <!-- Contient tous les services backend (microservices et API Gateway) -->  
 │   ├── auth-service/            <!-- Service gérant l'authentification des utilisateurs -->  
 │   │   ├── src/                 <!-- Code principal du service -->  
@@ -93,7 +93,7 @@ HubTask/
 │       ├── task-service/        <!-- Documentation spécifique pour le service task -->  
 │       ├── message-service/     <!-- Documentation spécifique pour le service message -->  
 │       └── gateway              <!-- Documentation spécifique pour le gateway -->  
-│     
+│        
 ├── frontend/                    <!-- Interface utilisateur construite en React -->  
 │   ├── src/                     <!-- Code frontend de l'application React -->  
 │   │   ├── components/          <!-- Composants de l'application React -->  
