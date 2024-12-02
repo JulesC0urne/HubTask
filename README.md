@@ -57,6 +57,13 @@ docker compose up --build -d
 
 -  Créez et gérez vos projets, tâches et discutez avec vos collaborateurs.  
 
+## Documentation Backend
+
+Vous pouvez accéder à la documentation complète du backend de ce projet en cliquant sur le lien ci-dessous :
+
+[Voir la documentation Javadoc](https://github.com/JulesC0urne/HubTask/tree/main/backend/docs)
+
+
 ## Architecture
 
 HubTask/  
