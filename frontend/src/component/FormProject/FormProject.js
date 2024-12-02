@@ -3,14 +3,37 @@ import { ProjectContext } from '../../context/ProjectContext/ProjectProvider';
 import AlertService from '../../utils/AlertService';
 import DarkModeToggle from "../DarkModalToggle/DarkModalToggle";
 
+/**
+ * Composant `FormProject`
+ * Ce composant permet à l'utilisateur de créer un projet en remplissant un formulaire.
+ * Il vérifie que les dates saisies sont valides et affiche des alertes si nécessaire.
+ * 
+ * @returns {JSX.Element} Le formulaire pour créer une tâche
+ */
 const FormProject = () => {
-  const { addProject } = useContext(ProjectContext);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [beginDate, setBeginDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  
+  // Accède à la fonction `addProject` du contexte
+  const { addProject } = useContext(ProjectContext); 
+  
+  // État pour le nom du projet
+  const [name, setName] = useState(""); 
+  
+  // État pour la description du projet
+  const [description, setDescription] = useState(""); 
+  
+  // État pour la date de début
+  const [beginDate, setBeginDate] = useState(""); 
+  
+  // État pour la date de fin
+  const [endDate, setEndDate] = useState(""); 
+  
+  // État pour savoir si le mode sombre est activé
+  const [isDarkMode, setIsDarkMode] = useState(false); 
 
+  /**
+   * Effet pour initialiser le mode sombre selon la préférence enregistrée dans `localStorage`
+   * Si le mode sombre est enregistré, il est appliqué lors du premier rendu du composant.
+   */
   useEffect(() => {
     const savedMode = localStorage.getItem("theme");
     if (savedMode === "dark") {
@@ -22,6 +45,10 @@ const FormProject = () => {
     }
   }, []);
 
+  /**
+   * Fonction qui gère la soumission du formulaire.
+   * Elle vérifie les dates saisies, crée un objet `newProject` et le transmet à la fonction `addProject`.
+   */
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -53,6 +80,9 @@ const FormProject = () => {
     }
   };
 
+  /**
+   * Fonction qui réinitialise les champs du formulaire à leur valeur initiale
+   */
   const resetFormFields = () => {
     setName("");
     setDescription("");

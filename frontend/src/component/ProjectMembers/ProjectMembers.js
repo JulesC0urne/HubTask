@@ -3,36 +3,104 @@ import { getAllUsers } from '../../service/AuthService';
 import { TaskContext } from '../../context/TaskContext/TaskContext';
 import AlertService from '../../utils/AlertService';
 
+/**
+ * Composant ProjectMembers
+ * 
+ * Ce composant permet de gérer les membres d'un projet. Il affiche une liste des membres actuels du projet, permet d'ajouter 
+ * un utilisateur à la liste des membres et de supprimer un utilisateur si l'utilisateur connecté est le propriétaire du projet.
+ * Il inclut également un menu pour sélectionner un utilisateur à ajouter.
+ * 
+ * @returns {JSX.Element} les menus affichant les membres d'un projet et les utilisateur susceptible d'être ajouté
+ */
 const ProjectMembers = () => {
-    const [isOpen, setIsOpen] = useState(false); // Contrôle de l'état de la boîte (ouverte ou fermée)
-    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false); // État pour le menu utilisateur
-    const [users, setUsers] = useState([]); // État pour les utilisateurs
-    const { handleAddMember, members, owner, handleDeleteMember } = useContext(TaskContext);
-    const userEmail = sessionStorage.getItem('mail');
-    const userMenuRef = useRef(null);
-    const menuRef = useRef(null);
-    const buttonRef = useRef(null); // Référence pour le bouton +
 
-    const handleToggle = () => {
-        setIsOpen(prevState => !prevState); // Inverse l'état de la boîte
-    };
+    // Contrôle l'ouverture/fermeture de la boîte des membres
+    const [isOpen, setIsOpen] = useState(false); 
 
-    const toggleUserMenu = async () => {
+    // Contrôle l'ouverture/fermeture du menu des utilisateurs
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false); 
 
-        if (users.length === 0) {
-            await fetchUsers();  // Charger les utilisateurs uniquement si c'est la première fois
-            console.log(users);
-        }
-        setIsUserMenuOpen(prevState => !prevState);
-    };
+    // Liste des utilisateurs récupérés pour l'ajout de membres
+    const [users, setUsers] = useState([]); 
 
+    // Fonctions et données du contexte
+    const { handleAddMember, members, owner, handleDeleteMember } = useContext(TaskContext); 
+
+    // Récupère l'email de l'utilisateur connecté
+    const userEmail = sessionStorage.getItem('mail'); 
+
+    // Référence pour le menu utilisateur
+    const userMenuRef = useRef(null); 
+
+    // Référence pour le menu des membres
+    const menuRef = useRef(null); 
+
+    // Référence pour le bouton d'ajout de membres (+)
+    const buttonRef = useRef(null); 
+
+    // Effet pour afficher une alerte si aucun utilisateur n'est trouvé
     useEffect(() => {
         if (users.length === 0 && isUserMenuOpen) {
             AlertService.info("Aucun utilisateur trouvé.");
         }
     }, [users, isUserMenuOpen]);
-    
 
+    /**
+     * Ajoute un écouteur d'événements pour fermer le menu lorsqu'on clique en dehors
+     */
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [])
+
+    /**
+     * Fonction pour inverser l'état de la boîte
+     */
+    const handleToggle = () => {
+        setIsOpen(prevState => !prevState); 
+    };
+
+    /**
+     * Fonction pour afficher/fermer le menu des utilisateurs
+     */
+    const toggleUserMenu = async () => {
+
+        if (users.length === 0) {
+            await fetchUsers(); 
+            console.log(users);
+        }
+        setIsUserMenuOpen(prevState => !prevState);
+    };
+
+    /**
+     * Fonction pour ajouter un membre au projet
+     * 
+     * @param {*} user L'utilisateur à ajouter
+     */
+    const handleUserSelect = (user) => {
+        handleAddMember(user.username);
+        setIsUserMenuOpen(false); 
+    };
+
+    /**
+     * Fonction pour fermer le menu si on clique en dehors
+     * @param {*} event 
+     */
+    const handleClickOutside = (event) => {
+        if (menuRef.current && !menuRef.current.contains(event.target)) {
+          setIsOpen(false);
+        }
+        if (userMenuRef.current && !userMenuRef.current.contains(event.target) && !buttonRef.current.contains(event.target)) {
+          setIsUserMenuOpen(false);
+        }
+    };
+    
+    /**
+     * Fonction pour récupérer tous les utilisateurs
+     */
     const fetchUsers = async () => {
         try {
           const userData = await getAllUsers(); 
@@ -47,28 +115,10 @@ const ProjectMembers = () => {
         }
     };
 
-    const handleUserSelect = (user) => {
-        handleAddMember(user.username);
-        setIsUserMenuOpen(false); // Ferme le menu après avoir sélectionné un utilisateur
-    };
-
-    const handleClickOutside = (event) => {
-        if (menuRef.current && !menuRef.current.contains(event.target)) {
-          setIsOpen(false);
-        }
-        if (userMenuRef.current && !userMenuRef.current.contains(event.target) && !buttonRef.current.contains(event.target)) {
-          setIsUserMenuOpen(false);
-        }
-    };
-
-    useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [])
-
+    /**
+     * Fonction pour supprimer un membre du projet
+     * @param {*} email l'email de l'utilisateur à supprimer
+     */
     const handleDelete = (email) => {
         if (userEmail === owner) {
           handleDeleteMember(email);

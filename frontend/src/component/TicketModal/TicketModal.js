@@ -2,32 +2,54 @@ import React, { useContext, useEffect, useState } from 'react';
 import { TaskContext } from '../../context/TaskContext/TaskContext';
 import AlertService from '../../utils/AlertService';
 
+/**
+ * Composant TicketModal pour afficher et modifier les informations d'un ticket
+ * 
+ * @param {Object} props - Les propriétés du composant
+ * @param {boolean} props.isOpen - Boolean pour savoir si la modal est ouverte ou non
+ * @param {function} props.onClose - Function du container parent qui ferme la modal et reset les champs.
+ * @param {Date} props.projectBegin - Date de début du projet
+ * @param {Date} props.projectEnd - Date de fin du projet
+ * @returns {JSX.Element} La modal du champs concerner pour un ticket donné
+ */
 const TicketModal = ({ isOpen, onClose, projectBegin, projectEnd}) => {
+    
+    // Extraction des informations du contexte TaskContext (ticket sélectionné, mise à jour de ticket, champ sélectionné à modifier)
     const { selectedTicket, updateTicket, ticketField } = useContext(TaskContext);
+
+    // État local pour stocker les informations mises à jour du ticket
     const [updatedTicket, setUpdatedTicket] = useState(selectedTicket);
 
-    const handleChange = (e) => {
-        setUpdatedTicket({
-            ...updatedTicket,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    const handleClose = () => {
-        onClose();
-    };
-
+    // Hook useEffect pour mettre à jour l'état local chaque fois que selectedTicket change
     useEffect(() => {
         if (selectedTicket) {
             setUpdatedTicket(selectedTicket);
         }
     }, [selectedTicket]);
 
+    /**
+     * Fonction appelée lorsque l'utilisateur modifie un champ du ticket dans le modal
+     * 
+     * @param {*} event
+     */
+    const handleChange = (event) => {
+        setUpdatedTicket({
+            ...updatedTicket,
+            [event.target.name]: event.target.value
+        });
+    };
+
+    /**
+     * Fonction appelée pour fermer le modal (passée depuis le parent)
+     */
+    const handleClose = () => {
+        onClose();
+    };
+    
+    /**
+     * Fonction pour accepter les modifications et mettre à jour le ticket
+     */
     const handleAccept = async () => {
-        console.log(ticketField);
-        console.log("dueDate : ", updateTicket.dueDate, " createDate : ", updateTicket.createDate);
-        console.log(" project End : ", projectEnd, " project begin : ", projectBegin);
-        console.log(updatedTicket);
         if(ticketField == "dueDate"){
             if (new Date(updatedTicket.dueDate) <= new Date(updatedTicket.createDate)){
                 AlertService.info("La date d'échéance ne peut être inférieur à la date de création.");
@@ -46,6 +68,11 @@ const TicketModal = ({ isOpen, onClose, projectBegin, projectEnd}) => {
         handleClose();
     };
 
+    /**
+     * Fonction pour rendre l'input approprié en fonction du champ sélectionné (title, description, dueDate)
+     * 
+     * @returns Un input ou un textarea en fonction champs selectionné
+     */
     const renderField = () => {
         const fieldMapping = {
             description: (
@@ -110,6 +137,12 @@ const TicketModal = ({ isOpen, onClose, projectBegin, projectEnd}) => {
 
 export default TicketModal;
 
+/**
+ * Fonction qui translate le titre de l'anglais vers le francais
+ * 
+ * @param {string} title le titre du champs à translate
+ * @returns le titre en francais
+ */
 const mapTitle = (title) => {
     switch (title) {
       case "dueDate":

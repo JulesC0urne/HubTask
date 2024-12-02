@@ -2,16 +2,35 @@ import React, { useState, useEffect } from "react";
 import { CheckCircleIcon, ClipboardDocumentCheckIcon, ClockIcon } from "@heroicons/react/24/outline";
 import DarkModeToggle from "../DarkModalToggle/DarkModalToggle";
 
-const HomePage = ({ loginClick, signupClick }) => {
+/**
+ * Composant `DefaultModal`
+ * Ce composant est une fenêtre modal qui affiche un aperçu de l'application avec un slider d'images,
+ * une description, des fonctionnalités de l'app, et des boutons pour la connexion et l'inscription.
+ * Il prend en charge le mode sombre et permet à l'utilisateur de basculer entre les modes.
+ * 
+ * @param {Function} loginClick - Fonction de gestion du clic sur le bouton de connexion
+ * @param {Function} signupClick - Fonction de gestion du clic sur le bouton d'inscription
+ * @returns {JSX.Element} Le formulaire pour créer une tâche
+ */
+const DefaultModal = ({ loginClick, signupClick }) => {
+
+  //l'index de l'image actuelle du slider
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+   // État pour savoir si le mode sombre est activé
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  // Liste des images à afficher dans le slider
   const images = [
     "https://images.pexels.com/photos/4342498/pexels-photo-4342498.jpeg",
     "https://images.pexels.com/photos/3182755/pexels-photo-3182755.jpeg",
     "https://images.pexels.com/photos/3727511/pexels-photo-3727511.jpeg",
   ];
 
+  /**
+   * Effet pour changer l'image du slider toutes les 5 secondes.
+   * Utilise un `setInterval` pour changer l'index de l'image.
+   */
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -20,6 +39,10 @@ const HomePage = ({ loginClick, signupClick }) => {
     return () => clearInterval(interval);
   }, []);
 
+  /**
+   * Effet pour initialiser le mode sombre en fonction de la préférence stockée dans `localStorage`.
+   * Si le mode sombre a été précédemment enregistré, il est appliqué au chargement.
+   */
   useEffect(() => {
     const savedMode = localStorage.getItem("theme");
     if (savedMode === "dark") {
@@ -31,6 +54,10 @@ const HomePage = ({ loginClick, signupClick }) => {
     }
   }, []);
 
+  /**
+   * Fonction pour basculer entre le mode sombre et le mode clair.
+   * Met à jour l'état du mode sombre et enregistre la préférence dans `localStorage`.
+   */
   const toggleDarkMode = () => {
     setIsDarkMode(prevMode => {
       const newMode = !prevMode;
@@ -123,4 +150,4 @@ const HomePage = ({ loginClick, signupClick }) => {
   );
 };
 
-export default HomePage;
+export default DefaultModal;

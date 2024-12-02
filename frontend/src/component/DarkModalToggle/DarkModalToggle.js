@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/outline"; // Import des icônes
 
-
+/**
+ * Composant `DarkModeToggle`
+ * Permet à l'utilisateur de basculer entre le mode sombre et le mode clair.
+ * L'état du mode est sauvegardé dans `localStorage` pour que le mode soit persistant entre les sessions.
+ * 
+ * @returns {JSX.Element} Le formulaire pour créer une tâche
+ */
 const DarkModeToggle = () => {
+  
+  // Déclaration de l'état pour savoir si le mode sombre est activé ou non
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   // Initialisation du mode sombre depuis localStorage
@@ -17,7 +25,11 @@ const DarkModeToggle = () => {
     }
   }, []);
 
-  // Fonction pour basculer le mode
+  /**
+   * Effet d'initialisation qui est exécuté au chargement du composant
+   * Vérifie dans le `localStorage` si un mode spécifique (clair ou sombre) a été sauvegardé
+   * et applique le mode correspondant.
+   */
   const toggleDarkMode = () => {
     if (isDarkMode) {
       document.documentElement.classList.remove("dark");
@@ -36,9 +48,9 @@ const DarkModeToggle = () => {
       className="fixed bottom-4 right-4 bg-white-500 dark:bg-neutral-700 text-white p-4 rounded-full shadow-lg hover:bg-primary-accent transition"
     >
        {isDarkMode ? (
-        <SunIcon className="h-6 w-6 text-white-500" /> // Icône pour le mode clair
+        <SunIcon className="h-6 w-6 text-white-500" /> 
       ) : (
-        <MoonIcon className="h-6 w-6" /> // Icône pour le mode sombre
+        <MoonIcon className="h-6 w-6" /> 
       )}
     </button>
   );

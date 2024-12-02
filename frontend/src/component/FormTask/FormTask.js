@@ -4,15 +4,38 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import AlertService from '../../utils/AlertService';
 import DarkModeToggle from "../DarkModalToggle/DarkModalToggle";
 
+/**
+ * Composant `FormTask`
+ * Ce composant permet à l'utilisateur de créer une nouvelle tâche liée à un projet.
+ * Il vérifie la validité des dates et affiche des alertes pour l'utilisateur.
+ * 
+ * @param {Object} props - Les propriétés du composant
+ * @param {number} props.projectId - L'identifiant unique de la conversation
+ * @returns {JSX.Element} Le formulaire pour créer une tâche
+ */
 const FormTask = ({projectId }) => { 
+    
+    // Récupère les fonctions et données du contexte des tâches
     const { addTicket, projectBegin, projectEnd } = useContext(TaskContext); 
 
-    const [projectName, setProjectName] = useState("");
-    const [projectDate, setProjectDate] = useState(""); 
-    const [description, setDescription] = useState(""); 
-    const [status, setStatus] = useState("To Do"); 
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    // Nom de la tâche
+    const [projectName, setProjectName] = useState(""); 
 
+    // Date d'échéance de la tâche
+    const [projectDate, setProjectDate] = useState(""); 
+
+    // Description de la tâche
+    const [description, setDescription] = useState(""); 
+
+    // Statut de la tâche
+    const [status, setStatus] = useState("To Do"); 
+
+    // État pour savoir si le mode sombre est activé
+    const [isDarkMode, setIsDarkMode] = useState(false); 
+
+    /**
+     * Effet pour initialiser le mode sombre en fonction des préférences sauvegardées dans `localStorage`.
+     */
     useEffect(() => {
         const savedMode = localStorage.getItem("theme");
         if (savedMode === "dark") {
@@ -24,7 +47,10 @@ const FormTask = ({projectId }) => {
         }
     }, []);
     
-    // Fonction de gestion de la soumission du formulaire.
+    /**
+     * Fonction qui gère la soumission du formulaire.
+     * Elle crée un ticket et le soumet à l'API pour l'ajouter.
+     */
     const handleSubmit = async (event) => {
         event.preventDefault(); // Empêche le comportement par défaut du formulaire.
 
@@ -55,7 +81,9 @@ const FormTask = ({projectId }) => {
         }
     };
 
-    // Fonction pour réinitialiser les champs du formulaire.
+    /**
+     * Fonction pour réinitialiser les champs du formulaire après une soumission réussie
+     */
     const resetFormFields = () => {
         setProjectName(""); // Réinitialise le champ du nom de la tâche.
         setDescription(""); // Réinitialise le champ de la description.
@@ -130,6 +158,5 @@ const FormTask = ({projectId }) => {
     );
 };
 
-export default FormTask; // Exportation du composant pour l'utiliser ailleurs dans l'application.
-
+export default FormTask; 
 

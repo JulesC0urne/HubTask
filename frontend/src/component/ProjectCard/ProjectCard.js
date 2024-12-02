@@ -2,9 +2,29 @@ import React, { useState, memo } from 'react';
 import AlertService from '../../utils/AlertService';
 import { TrashIcon } from "@heroicons/react/24/outline"; // Import de l'icône Trash
 
-
+/**
+ * Composant ProjectCard
+ * 
+ * Ce composant est responsable de l'affichage des informations de plusieurs projets dans des carte individuelle. Il affiche des 
+ * informations telles que le nom du projet, sa description, les dates de début et de fin, ainsi que le propriétaire et 
+ * les membres du projet pour chaque projets. Il permet également de supprimer un projet si l'utilisateur est le propriétaire du projet.
+ * 
+ * @param {Object} props - Propriétés transmises au composant.
+ * @param {Array} props.projects - Liste des projets à afficher.
+ * @param {Function} props.onDelete - Fonction appelée pour supprimer un projet.
+ * @param {Function} props.onClick - Fonction appelée lors d'un clic sur la carte du projet.
+ * @returns {JSX.Element} les cartes des projets
+ */
 const ProjectCard = memo(({ projects, onDelete, onClick }) => {
-    // Méthode pour marquer un projet comme complété
+
+    /**
+     * Fonction handleDelete
+     * 
+     * Cette fonction permet de supprimer un projet si l'utilisateur est le propriétaire du projet. Si l'utilisateur n'est 
+     * pas le propriétaire, un message d'alerte est affiché.
+     * 
+     * @param {Object} project - Le projet à supprimer.
+     */
     const handleDelete = (project) => {
         if(project.owner === sessionStorage.getItem('mail')){
             onDelete(project.id);

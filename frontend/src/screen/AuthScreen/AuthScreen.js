@@ -5,28 +5,49 @@ import SignupModal from '../../component/SignupModal/SignupModal';
 import DefaultModal from '../../component/DefaultModal/DefaultModal';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * Composant AuthScreen qui représente la page d'authentification de l'application.
+ * Cette screen inclus les compsoants `DefaultModal`, `SignupModal` et `LoginModal`
+ * 
+ * @returns {JSX.Element} La page d'authentification
+ */
 const AuthScreen = () => {
 
-    const navigate = useNavigate();
-    const [modalState, setModalState] = useState("default");
+    // Déclaration de la fonction de navigation pour rediriger l'utilisateur
+    const navigate = useNavigate();  
 
+    // État pour gérer le modal actuellement affiché, par défaut il est sur "default"
+    const [modalState, setModalState] = useState("default");  
+
+    /**
+     * Fonction pour réinitialiser l'état du modal à "default" (état initial)
+     */
     const handleDefaultState = () => {
         setModalState("default");
     }
 
+    /**
+     * Fonction pour changer l'état du modal à "login"
+     */
     const handleLoginState = () => {
         setModalState("login");
     }
 
+    /**
+     * Fonction pour changer l'état du modal à "signup"
+     */
     const handleSignupState = () => {
-        console.log("click signup");
         setModalState("signup");
     }
 
+    /**
+     * Fonction pour naviguer vers la screen des projets
+     */
     const handleNavigation = () => {
         navigate("/project");
     }
 
+    // useEffect qui appelle handleDefaultState à l'initialisation du composant
     useEffect(() => {
         handleDefaultState();
     }, []);

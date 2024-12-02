@@ -3,20 +3,56 @@ import { TaskContext } from '../../context/TaskContext/TaskContext';
 import TicketModal from '../TicketModal/TicketModal';
 import AlertService from '../../utils/AlertService';
 
+/**
+ * Composant principal TicketBoard permettant de drag and drop les tickets dans quatre colonnes 
+ * (A faire, En progression, En test, Fait)
+ * 
+ * @returns {JSX.Element} Le tableau de tickets
+ */
 const TicketBoard = () => {
-  const {projectEnd, projectBegin, tickets, updateTicket, deleteTicket, selectedTicket, selectTicket, clearSelectedTicket, selectTicketField, clearTicketField } = useContext(TaskContext);
+  // Extraction des variables du contexte TaskContext
+  const { projectEnd, 
+          projectBegin, 
+          tickets, 
+          updateTicket, 
+          deleteTicket, 
+          selectedTicket, 
+          selectTicket, 
+          clearSelectedTicket, 
+          selectTicketField, 
+          clearTicketField 
+        } = useContext(TaskContext);
+
+  // État pour savoir si le modal est ouvert ou non
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  /**
+   * Fonction appelée lors du début du drag d'un ticket
+   * 
+   * @param {*} event 
+   * @param {Object} ticket Le ticket à drag & drop
+   */
   const handleDragStart = (event, ticket) => {
     event.dataTransfer.setData('ticket', JSON.stringify(ticket));
   };
 
+  /**
+   * Fonction appelée lors du drop d'un ticket dans une nouvelle colonne
+   * 
+   * @param {*} event 
+   * @param {string} newStatus Le nouveau status du ticket après le drop
+   */
   const handleDrop = (event, newStatus) => {
     event.preventDefault();
     const ticketData = JSON.parse(event.dataTransfer.getData('ticket'));
     updateTicket(ticketData.createDate, { ...ticketData, status: newStatus });
   };
 
+  /**
+   * Fonction pour supprimer un ticket
+   * 
+   * @param {Date} createDate la date de création du ticket à supprimer
+   */
   const handleDelete = async (createDate) => {
     try {
       await deleteTicket(createDate);
@@ -26,16 +62,21 @@ const TicketBoard = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("IN TICKET BORAD => TICKET VALUES =>>", tickets);
-  }, []);
-
+  /**
+   * Fonction pour ouvrir le modal avec un ticket et un champ spécifique (par exemple titre, description)
+   * 
+   * @param {Object} ticket le ticket pour lequel ouvrir la modal
+   * @param {string} field le champs du ticket à modifier
+   */
   const openModal = (ticket, field) => {
     selectTicket(ticket);
     selectTicketField(field);
     setIsModalOpen(true);
   };
 
+  /**
+   * Fonction pour fermer le modal
+   */
   const closeModal = () => {
     clearSelectedTicket();
     clearTicketField();
@@ -124,7 +165,12 @@ const TicketBoard = () => {
   );
 };
 
-// Fonction utilitaire pour gérer les couleurs des statuts
+/**
+ * Fonction utilitaire pour gérer les couleurs des statuts
+ * 
+ * @param {*} status status pour lequel avoir la couleur
+ * @returns Un string représentant la couleur pour le mode clair et le mode sombre
+ */
 const getStatusColor = (status) => {
   switch (status) {
     case "To Do":
@@ -140,6 +186,12 @@ const getStatusColor = (status) => {
   }
 };
 
+/**
+ * Map le status en anglais pour l'afficher en francais
+ * 
+ * @param {*} status le status en anglais
+ * @returns Le status en francais
+ */
 const mapStatus = (status) => {
   switch (status) {
     case "To Do":

@@ -7,12 +7,32 @@ import FormProject from '../../component/FormProject/FormProject';
 import DarkModeToggle from "../../component/DarkModalToggle/DarkModalToggle";
 import Navbar  from '../../component/Navbar/Navbar';
 
+/**
+ * Composant ProjectScreen qui représente la page de visualisation, création et suppression des projets d'un utilisateur.
+ * 
+ * @returns {JSX.Element} La page des projets
+ */
 const ProjectScreen = () => {
-  const { projectsOwned, getProjectsOwned, projectsMember, fetchProjectsByMember, loadingOwned, loadingMember, deleteProject } = useContext(ProjectContext);
+  // Récupération des données et fonctions depuis ProjectContext
+  const { projectsOwned, 
+          getProjectsOwned, 
+          projectsMember, 
+          fetchProjectsByMember, 
+          loadingOwned, 
+          loadingMember, 
+          deleteProject 
+        } = useContext(ProjectContext);
+  
+  // Récupération des données et fonctions depuis TaskContext
   const { setProjectId } = useContext(TaskContext);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const navigate = useNavigate();
 
+  // Déclaration de l'état pour gérer le mode sombre
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Utilisation de navigate pour rediriger l'utilisateur vers d'autres pages
+  const navigate = useNavigate();  
+
+  // useEffect pour initialiser le mode sombre à partir du localStorage
   useEffect(() => {
     const savedMode = localStorage.getItem("theme");
     if (savedMode === "dark") {
@@ -24,6 +44,7 @@ const ProjectScreen = () => {
     }
   }, []);
 
+  // useEffect pour récupérer les projets de l'utilisateur
   useEffect(() => {
     const fetchProjects = async () => {
       await Promise.all([getProjectsOwned(), fetchProjectsByMember()]);
@@ -31,9 +52,17 @@ const ProjectScreen = () => {
     fetchProjects();
   }, []);
 
+  // Mémorise les projets détenus
   const ownedProjects = useMemo(() => projectsOwned, [projectsOwned]);
-  const memberProjects = useMemo(() => projectsMember, [projectsMember]);
 
+  // Mémorise les projets auxquels l'utilisateur appartient
+  const memberProjects = useMemo(() => projectsMember, [projectsMember]);  
+
+  /**
+   * Fonction qui permet de naviguer sur la page des tâches qui ont comme id de projet projectId
+   * 
+   * @param {number} projectId 
+   */
   const handleProjectClick = (projectId) => {
     setProjectId(projectId);
     navigate(`/task/${projectId}`);

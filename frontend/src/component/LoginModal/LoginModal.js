@@ -4,17 +4,34 @@ import AlertService from '../../utils/AlertService';
 import { login } from '../../service/AuthService';
 import DarkModeToggle from "../DarkModalToggle/DarkModalToggle";
 
-
+/**
+ * Composant `LoginModal`
+ * Ce composant représente une fenêtre modale pour la connexion d'un utilisateur.
+ * Il permet à l'utilisateur de se connecter via un formulaire avec un email et un mot de passe.
+ * Il gère également le mode sombre, l'affichage d'un slider d'images, et la navigation vers d'autres pages de l'application.
+ * 
+ * @param {Object} props - Les propriétés passées au composant
+ * @param {Function} props.backClick - Fonction qui gère le clic sur le bouton "Retour"
+ * @param {Function} props.goToProject - Fonction qui redirige vers la page de projets après la connexion réussie
+ * @param {Function} props.goToSignup - Fonction qui redirige vers la page d'inscription
+ * @returns {JSX.Element} Le formulaire de connexion avec le slider d'images et les boutons de navigation
+ */
 const LoginModal = ({ backClick, goToProject, goToSignup }) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // État pour gérer l'image affichée dans le slider
+  const [currentImageIndex, setCurrentImageIndex] = useState(0); 
+
+  // État pour gérer le mode sombre
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  // Liste des images à afficher dans le slider
   const images = [
     "https://images.pexels.com/photos/4342498/pexels-photo-4342498.jpeg",
     "https://images.pexels.com/photos/3182755/pexels-photo-3182755.jpeg",
     "https://images.pexels.com/photos/3727511/pexels-photo-3727511.jpeg",
   ];
 
+  // Effet pour faire défiler automatiquement les images du slider toutes les 4500 ms
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -23,6 +40,7 @@ const LoginModal = ({ backClick, goToProject, goToSignup }) => {
     return () => clearInterval(interval);
   }, []);
 
+  // Effet pour appliquer le mode sombre basé sur la préférence sauvegardée dans `localStorage`
   useEffect(() => {
     const savedMode = localStorage.getItem("theme");
     if (savedMode === "dark") {
@@ -34,6 +52,9 @@ const LoginModal = ({ backClick, goToProject, goToSignup }) => {
     }
   }, []);
 
+  /**
+   * Fonction pour basculer entre le mode sombre et clair
+   */
   const toggleDarkMode = () => {
     setIsDarkMode(prevMode => {
       const newMode = !prevMode;
@@ -43,18 +64,31 @@ const LoginModal = ({ backClick, goToProject, goToSignup }) => {
     });
   };
 
+  /**
+   * Fonction pour gérer le clic sur le bouton "Retour"
+   */
   const handleBackClick = () => {
     backClick();
   };
 
+  /**
+   * Fonction pour gérer le clic sur le lien "Inscription"
+   */
   const handleSignupClick = () => {
     goToSignup();
   }
 
+  /**
+   * Fonction pour aller sur la page des projets
+   */
   const handleProjectClick = () => {
     goToProject();
   };
 
+  /**
+   * Fonction pour gérer la soumission du formulaire de connexion
+   * @param {*} event 
+   */
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.target);

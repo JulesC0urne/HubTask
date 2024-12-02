@@ -2,18 +2,39 @@ import React, { createContext, useState, useEffect } from 'react';
 import { EventSourcePlus } from "event-source-plus";
 import axios from 'axios';
 
+// Création du contexte ConversationContext
 export const ConversationContext = createContext();
 
+/**
+ * Provider pour gérer l'état global de la conversation
+ * 
+ * @param {*} children
+ * @returns {Provider} ConversationContext.Provider
+ */
 export const ConversationProvider = ({ children }) => {
 
-    const [conversationId, setConversationId] = useState(null);
-    const jwtToken = sessionStorage.getItem('jwtToken'); 
-    const userEmail = sessionStorage.getItem('mail');
-    const [eventSourceListener, setEventSourceListener] = useState(null);
-    const [messages, setMessages] = useState([]);
-    const [newMessage, setNewMessage] = useState('');
-    const [loading, setLoading] = useState(true);
+    // L'ID de la conversation actuelle
+    const [conversationId, setConversationId] = useState(null); 
 
+    // Récupération du token JWT depuis sessionStorage
+    const jwtToken = sessionStorage.getItem('jwtToken'); 
+
+    // Récupération de l'email de l'utilisateur depuis sessionStorage
+    const userEmail = sessionStorage.getItem('mail'); 
+
+    // Écouteur de messages en temps réel
+    const [eventSourceListener, setEventSourceListener] = useState(null); 
+
+    // Liste des messages de la conversation
+    const [messages, setMessages] = useState([]); 
+
+    // Message actuellement saisi par l'utilisateur
+    const [newMessage, setNewMessage] = useState(''); 
+
+    // Indicateur de chargement des messages
+    const [loading, setLoading] = useState(true); 
+
+    // useEffect pour établir une connexion EventSource lorsque la conversation change
     useEffect(() => {
         if (!jwtToken || !conversationId) return;
     
@@ -25,7 +46,7 @@ export const ConversationProvider = ({ children }) => {
                 "Authorization": `Bearer ${jwtToken}`
             }
         });
-        //console.log("event source MESSAGE created...");
+
         const listener = eventSource.listen({
             async onMessage(event) {
                 const data = JSON.parse(event.data);
@@ -48,7 +69,13 @@ export const ConversationProvider = ({ children }) => {
         };
     }, [conversationId, jwtToken, loading]);
     
-
+    /**
+     * Fonction d'envoie d'un nouveau message
+     * 
+     * @param {number} conversationId - L'id de la conversation dans laquelle envoyer le message
+     * @param {string} newMessage - Le nouveau message à envoyer
+     * @param {string[]} members - La liste d'emails représentant les membre inclus dans la conversation
+     */
     const sendMessage = async (conversationId, newMessage, members) => {
 
         const message = {
@@ -64,7 +91,7 @@ export const ConversationProvider = ({ children }) => {
                     'Content-Type': 'application/json',
                 }
             });
-            console.log(response.data);
+
             if (response.data === "Message sent") {
                 setNewMessage('');
                 console.log("Message send with value : ", message);
@@ -76,6 +103,11 @@ export const ConversationProvider = ({ children }) => {
         }
     };
 
+    /**
+     * Fonction qui récupère la conversation à partir de son id.
+     * 
+     * @param {number} id - L'id de la conversation à récupérer
+     */
     const getConversationById = async (id) => {
         const jwtToken = sessionStorage.getItem('jwtToken'); 
         if (!id) {
@@ -88,14 +120,14 @@ export const ConversationProvider = ({ children }) => {
         }
         
         setLoading(true);
-        console.log("loading is true"); 
+
         try {
             const response = await axios.get(`http://localhost:8080/api/messages/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${jwtToken}`,
                 }
             });
-            //console.log("Messages get on initialisation with value : ", response.data);
+
             setMessages(response.data);
             setConversationId(id);
         } catch (error) {
@@ -106,8 +138,9 @@ export const ConversationProvider = ({ children }) => {
         }
     };
     
-
-    // Reset the conversation state
+    /**
+     * Reset les champs lié à la conversation en cours
+     */
     const resetConversation = () => {
         setConversationId("");
         setMessages([]);

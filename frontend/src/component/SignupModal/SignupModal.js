@@ -4,16 +4,33 @@ import AlertService from '../../utils/AlertService';
 import { signup } from '../../service/AuthService';
 import DarkModeToggle from "../DarkModalToggle/DarkModalToggle";
 
+/**
+ * Composant `SignupModal`
+ * Ce composant représente une fenêtre modale pour l'inscription d'un utilisateur.
+ * Il permet à l'utilisateur de s'inscrire via un formulaire avec un email et un mot de passe et une vérification de mot de passe.
+ * Il gère également le mode sombre, l'affichage d'un slider d'images, et la navigation vers d'autres pages de l'application.
+ * 
+ * @param {Object} props - Les propriétés passées au composant
+ * @param {Function} props.backClick - Fonction qui gère le clic sur le bouton "Retour"
+ * @param {Function} props.goToToLogin - Fonction qui redirige vers le formulaire de connexion
+ * @returns {JSX.Element} Le formulaire de connexion avec le slider d'images et les boutons de navigation
+ */
 const SignupModal = ({ backClick , goToLogin}) => {
+
+  // État pour l'index de l'image affichée dans le slider
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // État pour savoir si le mode sombre est activé
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  // Tableau contenant les URLs des images à afficher dans le slider
   const images = [
     "https://images.pexels.com/photos/4342498/pexels-photo-4342498.jpeg",
     "https://images.pexels.com/photos/3182755/pexels-photo-3182755.jpeg",
     "https://images.pexels.com/photos/3727511/pexels-photo-3727511.jpeg",
   ];
 
+  // useEffect pour changer l'image affichée toutes les 4,5 secondes (rotation du slider)
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -22,6 +39,7 @@ const SignupModal = ({ backClick , goToLogin}) => {
     return () => clearInterval(interval);
   }, []);
 
+  // useEffect pour gérer l'état du thème (clair ou sombre) en fonction de la préférence de l'utilisateur
   useEffect(() => {
     const savedMode = localStorage.getItem("theme");
     if (savedMode === "dark") {
@@ -33,14 +51,25 @@ const SignupModal = ({ backClick , goToLogin}) => {
     }
   }, []);
 
+  /**
+   * Méthode pour gérer le clic sur le bouton "Retour"
+   */
   const handleBackClick = () => {
     backClick();
   };
-
+  
+  /**
+   * Méthode pour gérer la navigation vers le formulaire de connexion
+   */
   const handleLoginClick = () => {
     goToLogin();
   }
 
+  /**
+   * Méthode pour gérer l'envoi du formulaire d'inscription
+   * 
+   * @param {*} event 
+   */
   const handleSubmit = async (event) => {
       event.preventDefault();
       const data = new FormData(event.target);

@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'; // Ajout de useState pour gérer l'état du mode sombre
-import { useParams, useNavigate } from 'react-router-dom';
-import { TaskContext } from '../../context/TaskContext/TaskContext';
+import React, { useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { ConversationContext } from '../../context/ConversationContext/ConversationContext';
 import TicketBoard from '../../component/TicketBoard/TicketBoard';
 import Navbar from '../../component/Navbar/Navbar';
@@ -10,15 +9,22 @@ import Conversation from '../../component/Conversation/Conversation';
 import DarkModeToggle from "../../component/DarkModalToggle/DarkModalToggle";
 import ProjectMembers from '../../component/ProjectMembers/ProjectMembers';
 
+/**
+ * Composant TaskScreen qui représente la page de visualisation, création, suppression et modification des tâches.
+ * 
+ * @returns {JSX.Element} La page des tâches
+ */
 const TaskScreen = () => {
     // Déclarez l'état pour le mode sombre
-    const [isDarkMode, setIsDarkMode] = useState(false);  // Gestion de l'état du mode sombre
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
-    const { resetTasks } = useContext(TaskContext);
-    const { resetConversation, setConversationId, getConversationById } = useContext(ConversationContext);
+    // Fonctions pour gérer les conversations
+    const { setConversationId, getConversationById } = useContext(ConversationContext);
+
+     // Récupération de l'ID du projet à partir des paramètres de l'URL
     const { projectId } = useParams();
-    const navigate = useNavigate();
 
+    // useEffect pour gérer l'activation du mode sombre à partir du localStorage
     useEffect(() => {
         const savedMode = localStorage.getItem("theme");
         if (savedMode === "dark") {
@@ -30,12 +36,7 @@ const TaskScreen = () => {
         }
     }, []);
 
-    const handleBackClick = () => {
-        navigate('/project');
-        resetTasks(); 
-        resetConversation();
-    };
-
+    // useEffect pour récupérer la conversation associée au projet lorsqu'il est chargé
     useEffect(() => {
         const fetchConv = async () => {
             console.log("TaskScreen get id : ", projectId);

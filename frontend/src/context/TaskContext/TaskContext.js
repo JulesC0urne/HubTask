@@ -3,21 +3,51 @@ import { createTask, updateTask, deleteTaskByCreateDate, getTasksByProjectId } f
 import { getMembersByProjectId, addMemberToProject, deleteMemberFromProject, getProjectById } from '../../service/ProjectService';
 import { EventSourcePlus } from "event-source-plus";
 
+//Création du contexte pour les tâches
 export const TaskContext = createContext();
 
+/**
+ * Provider pour gérer l'état global des tâches associés à un projet
+ * 
+ * @param {*} children 
+ * @returns {Provider} TaskContext.Provider
+ */
 export const TaskProvider = ({ children }) => {
-    const [tickets, setTickets] = useState([]);
-    const [selectedTicket, setSelectedTicket] = useState(null);
+
+    // Liste des tâches (tickets)
+    const [tickets, setTickets] = useState([]);  
+    
+    // Tâche sélectionnée
+    const [selectedTicket, setSelectedTicket] = useState(null); 
+
+    // Champ de saisie lié à la tâche
     const [ticketField, setTicketField] = useState("");
-    const [projectId, setProjectId] = useState(null);
+    
+    // ID du projet auquel les tâches sont associées
+    const [projectId, setProjectId] = useState(null); 
+    
+    // Date de début du projet
     const [projectBegin, setProjectBegin] = useState("");
-    const [projectEnd, setProjectEnd] = useState("");
-    const [members, setMembers] = useState([]);
-    const [owner, setOwner] = useState(null);
-    const jwtToken = sessionStorage.getItem('jwtToken');
-    const userEmail = sessionStorage.getItem('mail');
+    
+    // Date de fin du projet
+    const [projectEnd, setProjectEnd] = useState("");   
+    
+    // Liste des membres du projet
+    const [members, setMembers] = useState([]);    
+    
+    // Propriétaire du projet
+    const [owner, setOwner] = useState(null);         
+    
+    // Récupération du JWT token de la session
+    const jwtToken = sessionStorage.getItem('jwtToken'); 
+    
+    // Récupération de l'email de l'utilisateur
+    const userEmail = sessionStorage.getItem('mail');  
+
+    // Écouteur des événements via EventSourcePlus      
     const [eventSourceListener, setEventSourceListener] = useState(null);
 
+    // useEffect pour récupérer les informations du projet dès que l'ID du projet change
     useEffect(() => {
         const fetchData = async () => {
             if (!projectId) return; // Vérifie que projectId existe
@@ -41,8 +71,8 @@ export const TaskProvider = ({ children }) => {
         fetchData();
     }, [projectId]);
 
+    // useEffect pour gérer la connexion en temps réel avec les événements de tâches
     useEffect(() => {
-        // Fonction pour écouter les événements dès qu'ils se produisent
         if (!jwtToken) {
             console.error("No JWT token found. Please log in.");
             return;
@@ -98,6 +128,11 @@ export const TaskProvider = ({ children }) => {
 
     }, [projectId, tickets, eventSourceListener]);
 
+    /**
+     * Fonction qui ajoute un nouveau membre au projet en cours.
+     * 
+     * @param {string} newMemberEmail 
+     */
     const handleAddMember = async (newMemberEmail) => {
         try {
             await addMemberToProject(projectId, newMemberEmail);
@@ -107,6 +142,11 @@ export const TaskProvider = ({ children }) => {
         }
     };
 
+    /**
+     * Fonction qui supprime un membre au projet en cours.
+     * 
+     * @param {string} email 
+     */
     const handleDeleteMember = async (email) => {
         try {
             await deleteMemberFromProject(projectId, email);
@@ -116,6 +156,11 @@ export const TaskProvider = ({ children }) => {
         }
     };
 
+    /**
+     * Fonction qui ajoute une tâche au projet en cours
+     * 
+     * @param {Object} newTicket 
+     */
     const addTicket = async (newTicket) => {
         try {
             const createdTask = await createTask(newTicket);
@@ -124,7 +169,13 @@ export const TaskProvider = ({ children }) => {
             console.error('Error creating task:', error);
         }
     };
-
+    
+    /**
+     * Fonction qui met à jour le ticket avec l'id ticketId
+     * 
+     * @param {number} ticketId 
+     * @param {Object} updatedTicket 
+     */
     const updateTicket = async (ticketId, updatedTicket) => {
         try {
             await updateTask(ticketId, updatedTicket);
@@ -139,6 +190,11 @@ export const TaskProvider = ({ children }) => {
         }
     };
 
+    /**
+     * Fonction qui supprime le ticket avec la date de création createDate
+     * 
+     * @param {Date} createDate 
+     */
     const deleteTicket = async (createDate) => {
         try {
             await deleteTaskByCreateDate(createDate);
@@ -148,6 +204,9 @@ export const TaskProvider = ({ children }) => {
         }
     };
 
+    /**
+     * Reset les champs associé au projet en cours et aux tâches
+     */
     const resetTasks = () => {
         setTickets([]);
         setSelectedTicket(null);
@@ -161,11 +220,9 @@ export const TaskProvider = ({ children }) => {
 
     const selectTicket = (ticket) => setSelectedTicket(ticket); 
     const clearSelectedTicket = () => setSelectedTicket(null); 
-
     const selectTicketField = (field) => setTicketField(field);
     const clearTicketField = () => setTicketField("");
 
-    
     return (
         <TaskContext.Provider 
             value={{ 

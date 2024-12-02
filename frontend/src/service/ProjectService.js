@@ -1,17 +1,28 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/api/projects'; // Modifiez l'URL en fonction de votre configuration
+// Constantes de configuration de l'url pour accéder au service de gestion des projets
+const API_URL = 'http://localhost:8080/api/projects';
 
+/**
+ * Fonction qui retourne le token d'authentification
+ * 
+ * @returns le token jwt de l'utilisateur
+ */
 const getAuthToken = () => {
-    return sessionStorage.getItem('jwtToken');  // Adjust according to your token storage logic
+    return sessionStorage.getItem('jwtToken'); 
 };
 
-// Récupérer les projets par nom d'utilisateur
+/**
+ * Récupérer les projets par nom d'utilisateur ou il est propriétaire
+ * 
+ * @param {string} owner - l'email de l'utilisateur qui est propriétaire du projet
+ * @returns response.data - la liste des projets
+ */
 export const getProjectsByOwner = async (owner) => {
     try {
         const response = await axios.get(`${API_URL}/owner/${owner}`, {
             headers: {
-                'Authorization': `Bearer ${getAuthToken()}` // Add Bearer token to the headers
+                'Authorization': `Bearer ${getAuthToken()}` 
             }
         });
         return response.data;
@@ -21,12 +32,17 @@ export const getProjectsByOwner = async (owner) => {
     }
 };
 
-// Créer un nouveau projet
+/**
+ * Créer un nouveau projet
+ * 
+ * @param {Object} projectData - le projet à créer
+ * @returns response.data - le message de réussite ou d'échec
+ */
 export const createProject = async (projectData) => {
     try {
         const response = await axios.post(API_URL, projectData, {
             headers: {
-                'Authorization': `Bearer ${getAuthToken()}` // Add Bearer token to the headers
+                'Authorization': `Bearer ${getAuthToken()}`
             }
         });
         return response.data;
@@ -36,7 +52,12 @@ export const createProject = async (projectData) => {
     }
 };
 
-// Récupérer un projet par ID
+/**
+ * Récupérer un projet par ID
+ * 
+ * @param {number} projectId - l'id du projet à récupérer
+ * @returns response.data - le projet qui à l'id projectId
+ */
 export const getProjectById = async (projectId) => {
     try {
         const response = await axios.get(`${API_URL}/${projectId}`, {
@@ -51,12 +72,18 @@ export const getProjectById = async (projectId) => {
     }
 };
 
-// Mettre à jour un projet
+/**
+ *  Mettre à jour un projet
+ * 
+ * @param {number} projectId - l'id du projet à modifier
+ * @param {Object} projectData  - le projet à modifier
+ * @returns response.data - le projet modifier
+ */
 export const updateProject = async (projectId, projectData) => {
     try {
         const response = await axios.put(`${API_URL}/${projectId}`, projectData, {
             headers: {
-                'Authorization': `Bearer ${getAuthToken()}` // Add Bearer token to the headers
+                'Authorization': `Bearer ${getAuthToken()}`
             }
         });
         return response.data;
@@ -66,7 +93,12 @@ export const updateProject = async (projectId, projectData) => {
     }
 };
 
-// Supprimer un projet par ID
+/**
+ * Supprimer un projet par ID
+ * 
+ * @param {number} projectId - l'id du projet à supprimer
+ * @returns true si supprimer, false sinon
+ */
 export const deleteProjectById = async (projectId) => {
     try {
         const response = await axios.delete(`${API_URL}/${projectId}`, {
@@ -82,7 +114,12 @@ export const deleteProjectById = async (projectId) => {
     }
 };
 
-// Récupérer les membres d'un projet par ID
+/**
+ *  Récupérer les membres d'un projet par ID
+ * 
+ * @param {number} projectId - l'id du projet où récuperer les membres
+ * @returns response.data - une liste d'emails
+ */
 export const getMembersByProjectId = async (projectId) => {
     try {
         const response = await axios.get(`${API_URL}/${projectId}/members`, {
@@ -96,11 +133,16 @@ export const getMembersByProjectId = async (projectId) => {
         throw error; // Lève l'erreur pour la gérer dans le composant appelant
     }
 };
-
-// Ajouter un membre à un projet
+ 
+/**
+ * Ajouter un membre à un projet
+ * 
+ * @param {number} projectId - l'id du projet ou ajouter les membres
+ * @param {string} memberEmail - l'emil du membre à ajouter au projet
+ */
 export const addMemberToProject = async (projectId, memberEmail) => {
     try {
-        await axios.post(`${API_URL}/${projectId}/members`, { memberEmail }, {  // Envoyer un objet JSON
+        await axios.post(`${API_URL}/${projectId}/members`, { memberEmail }, {  
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${getAuthToken()}`
@@ -109,12 +151,16 @@ export const addMemberToProject = async (projectId, memberEmail) => {
         console.log("Member added successfully");
     } catch (error) {
         console.error("Error adding member:", error);
-        throw error; // Lève l'erreur pour la gérer dans le composant appelant
+        throw error; 
     }
 };
-
-
-// Supprimer un membre d'un projet
+ 
+/**
+ * Supprimer un membre d'un projet
+ * 
+ * @param {number} projectId - l'id du projet où supprimer un membre
+ * @param {string} memberEmail - l'email du membre à supprimer
+ */
 export const deleteMemberFromProject = async (projectId, memberEmail) => {
     
     try {
@@ -134,6 +180,12 @@ export const deleteMemberFromProject = async (projectId, memberEmail) => {
     }
 };
 
+/**
+ * Récupère les projets dont memberEmail est membre
+ * 
+ * @param {string} memberEmail - l'email du membre
+ * @returns response.data - les projets
+ */
 export const getProjectsByMember = async (memberEmail) => {
     try {
         const response = await axios.get(`${API_URL}/member/${memberEmail}`, {

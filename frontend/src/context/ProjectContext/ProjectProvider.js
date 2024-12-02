@@ -2,17 +2,37 @@ import React, { createContext, useState, useEffect } from 'react';
 import { createProject, updateProject, deleteProjectById, getProjectsByOwner, getProjectsByMember } from '../../service/ProjectService';
 import { EventSourcePlus } from "event-source-plus";
 
+//Création du contexte pour les projets
 export const ProjectContext = createContext();
 
+/**
+ * Provider pour gérer l'état global des projets d'un utilisateur
+ * 
+ * @param {*} children
+ * @returns {Provider} ProjectContext.Provider
+ */
 export const ProjectProvider = ({ children }) => {
-    const [projectsOwned, setProjectsOwned] = useState([]);
+
+    // Projets que l'utilisateur possède
+    const [projectsOwned, setProjectsOwned] = useState([]);  
+
+    // Projets où l'utilisateur est membre
     const [projectsMember, setProjectsMember] = useState([]);
-    const [loadingOwned, setLoadingOwned] = useState(true);
-    const [loadingMember, setLoadingMember] = useState(true);
+
+    // Indicateur de chargement pour les projets possédés
+    const [loadingOwned, setLoadingOwned] = useState(true);  
+
+    // Indicateur de chargement pour les projets membres
+    const [loadingMember, setLoadingMember] = useState(true); 
+
+    // Récupération du token JWT et de l'email de l'utilisateur depuis la session
     const jwtToken = sessionStorage.getItem('jwtToken'); 
     const userEmail = sessionStorage.getItem('mail');
+
+    // États pour gérer la connexion en temps réel avec EventSource
     const [eventSourceListener, setEventSourceListener] = useState(null);
 
+    // useEffect pour établir une connexion en temps réel avec EventSourcePlus
     useEffect(() => {
         console.log("useEffect for EventSourcePlus triggered.");
     
@@ -25,9 +45,9 @@ export const ProjectProvider = ({ children }) => {
         
         if (!eventSourceListener) {
             console.log("Establishing EventSourcePlus connection on Projects with token:", jwtToken);
-            // Initialiser la connexion EventSourcePlus
+
             const eventSource = new EventSourcePlus("http://localhost:8080/api/projects/events", {
-                method: "GET", // Méthode GET pour EventSource
+                method: "GET", 
                 headers: {
                     "Authorization": `Bearer ${jwtToken}`,
                     "Content-Type": "application/json"
@@ -128,7 +148,9 @@ export const ProjectProvider = ({ children }) => {
 
     }, [projectsOwned, projectsMember, eventSourceListener]);
 
-    // Récupération des projets possédés par l'utilisateur
+    /**
+     * Récupération des projets possédés par l'utilisateur
+     */
     const getProjectsOwned = async () => {
         try {
             const owner = sessionStorage.getItem('mail');
@@ -141,7 +163,9 @@ export const ProjectProvider = ({ children }) => {
         }
     };
 
-    // Récupération des projets où l'utilisateur est membre
+    /**
+     * Récupération des projets où l'utilisateur est membre
+     */
     const fetchProjectsByMember = async () => {
         try {
             const memberEmail = sessionStorage.getItem('mail');
@@ -154,7 +178,11 @@ export const ProjectProvider = ({ children }) => {
         }
     };
 
-    // Ajouter un projet et informer en temps réel
+    /**
+     * Ajouter un projet et informer en temps réel
+     * 
+     * @param {Object} newProject - Le projet à créer
+     */
     const addProject = async (newProject) => {
         try {
             const createdProject = await createProject(newProject);
@@ -164,6 +192,12 @@ export const ProjectProvider = ({ children }) => {
         }
     };
 
+    /**
+     * Modifier un projet existant
+     * 
+     * @param {number} projectId - l'id du projet à modifier
+     * @param {Object} updatedProject - le projet modifié
+     */
     const doUpdateProject = async (projectId, updatedProject) => {
         try {
             const project = await updateProject(projectId, updatedProject);
@@ -174,7 +208,12 @@ export const ProjectProvider = ({ children }) => {
             console.error('Error updating project:', error);
         }
     };
-
+    
+    /**
+     * Supprime le projet avec l'id projectId
+     * 
+     * @param {number} projectId - L'id du projet à supprimer
+     */
     const deleteProject = async (projectId) => {
         try {
             await deleteProjectById(projectId);
@@ -184,7 +223,9 @@ export const ProjectProvider = ({ children }) => {
         }
     };
 
-    // Réinitialiser les projets
+    /**
+     * Réinitialiser les projets associés à l'utilisateur
+     */
     const resetProjects = () => {
         setProjectsOwned([]);
         setProjectsMember([]);

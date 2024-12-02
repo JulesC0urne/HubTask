@@ -4,14 +4,38 @@ import DarkModeToggle from "../DarkModalToggle/DarkModalToggle"; // Mode clair/s
 import { logout } from '../../service/AuthService'; // Fonction de déconnexion
 import { TaskContext } from '../../context/TaskContext/TaskContext';
 
+/**
+ * Composant `Navbar`
+ * La barre de navigation affichée en haut de l'application. Elle contient :
+ * - Le logo de l'application
+ * - Des liens de navigation vers les projets de l'utilisateur
+ * - Un menu utilisateur pour accéder à son profil ou se déconnecter
+ * - Un bouton pour basculer entre le mode clair et sombre
+ * 
+ * @returns {JSX.Element} La barre de navigation avec les éléments décrits ci-dessus
+ */
 const Navbar = () => {
-  const navigate = useNavigate();
-  const match = useMatch('/task/:projectId');
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Gestion du menu utilisateur
-  const [isDarkMode, setIsDarkMode] = useState(false); // Mode sombre/clair
-  const menuRef = useRef(null); // Référence pour gérer les clics extérieurs
-  const userEmail = sessionStorage.getItem('mail') || 'admin@hubtask.io';
-  const { resetTasks } = useContext(TaskContext);
+
+  // Hook de navigation pour rediriger vers d'autres pages
+  const navigate = useNavigate(); 
+
+  // Vérifie si l'URL correspond à un projet spécifique
+  const match = useMatch('/task/:projectId'); 
+
+  // État pour gérer l'ouverture et la fermeture du menu utilisateur
+  const [isMenuOpen, setIsMenuOpen] = useState(false); 
+
+  // État pour gérer le mode sombre
+  const [isDarkMode, setIsDarkMode] = useState(false); 
+
+  // Référence pour détecter les clics extérieurs au menu utilisateur
+  const menuRef = useRef(null); 
+
+  // Récupère l'email de l'utilisateur, ou utilise un email par défaut
+  const userEmail = sessionStorage.getItem('mail') || 'admin@hubtask.io'; 
+
+  // Contexte pour réinitialiser les tâches (par exemple, après la déconnexion)
+  const { resetTasks } = useContext(TaskContext); 
 
   // Vérifier le mode sombre au chargement
   useEffect(() => {
@@ -25,25 +49,34 @@ const Navbar = () => {
     }
   }, []);
 
-  // Fonction pour gérer la déconnexion
+  /**
+   * Fonction pour gérer la déconnexion
+   */
   const handleLogout = () => {
     logout();
     resetTasks();
     navigate('/');
   };
 
-  // Gérer les clics extérieurs pour fermer le menu
+  /**
+   * Gérer les clics extérieurs pour fermer le menu
+   * @param {*} event 
+   */
   const handleClickOutside = (event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
       setIsMenuOpen(false);
     }
   };
-
+  
+  /**
+   * Gérer le clique sur le bouton projet
+   */
   const handleProjectClick = () => {
     resetTasks();
     navigate('/project');
   }
 
+  // Mise en place d'un useEffect sur les evenements de clique
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {

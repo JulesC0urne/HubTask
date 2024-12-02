@@ -50,8 +50,11 @@
     "@babel/plugin-transform-private-property-in-object": "^7.25.9",
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.9",
+    "eslint-plugin-storybook": "^0.11.1",
     "jest-mock": "^29.7.0",
-    "jest-mock-axios": "^4.7.3"
+    "jest-mock-axios": "^4.7.3",
+    "prop-types": "^15.8.1",
+    "webpack": "^5.96.1"
   },
   "jest": {
     "moduleNameMapper": {
