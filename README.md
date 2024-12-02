@@ -10,6 +10,7 @@ L'application utilise React pour le frontend, Spring Boot pour le backend, Postg
 - [Versions](#versions)
 - [Installation](#installation)
   - [Docker](#docker)
+- [Documentation Backend](#documentation)
 - [Utilisation](#utilisation)
 - [Architecture](#architecture)
 
@@ -61,7 +62,7 @@ docker compose up --build -d
 
 Vous pouvez accéder à la documentation complète du backend de ce projet en cliquant sur le lien ci-dessous :
 
-[Voir la documentation Javadoc](https://github.com/JulesC0urne/HubTask/tree/main/backend/docs)
+[Voir la documentation Javadoc](https://github.com/JulesC0urne/HubTask/tree/7f23df19c07e8279beb67d1d1abb4eecdbc59c41/backend/docs/auth-service)
 
 
 ## Architecture
