@@ -62,7 +62,7 @@ docker compose up --build -d
 
 Vous pouvez accéder à la documentation complète du backend de ce projet en cliquant sur le lien ci-dessous :
 
-[Voir la documentation Javadoc](./backend/docs/auth-service/index.html)
+[Voir la documentation Javadoc](./backend/docs/)
 
 
 ## Architecture
